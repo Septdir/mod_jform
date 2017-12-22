@@ -14,6 +14,7 @@ use Joomla\CMS\Form\Form;
 use Joomla\Registry\Registry;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
 
 jimport('joomla.filesystem.file');
 
@@ -50,35 +51,69 @@ class modJFormHelper
 
 		$data = $app->input->post->get($form->getName(), array(), 'array');
 
-		$validate = $form->validate($data);
+		$validData = self::validate($form, $data);
 
-		$error = false;
-		// Check for an error.
-		if ($validate instanceof \Exception)
+		// Check for validation errors.
+		if ($validData === false)
 		{
-			throw new Exception($validate->getMessage(), 404);
-			$error = true;
+			return false;
+		}
+
+		echo '<pre>', print_r($validData, true), '</pre>';
+
+		return true;
+
+	}
+
+
+	/**
+	 * Method to validate the form data.
+	 *
+	 * @param   \JForm $form The form to validate against.
+	 * @param   array  $data The data to validate.
+	 *
+	 * @return  array|boolean  Array of filtered data if valid, false otherwise.
+	 *
+	 * @see     \JFormRule
+	 * @see     \JFilterInput
+	 * @since   1.6
+	 */
+	public static function validate($form, $data)
+	{
+		// Include the plugins for the delete events.
+		PluginHelper::importPlugin('content');
+
+		$dispatcher = \JEventDispatcher::getInstance();
+		$dispatcher->trigger('onUserBeforeDataValidation', array($form, &$data));
+
+		// Filter and validate the form data.
+		$data   = $form->filter($data);
+		$return = $form->validate($data);
+
+		// Check for an error.
+		if ($return instanceof \Exception)
+		{
+			throw new Exception($return->getMessage(), 404);
+
+			return false;
 		}
 
 		// Check the validation results.
-		if ($validate === false)
+		if ($return === false)
 		{
 			// Get the validation messages from the form.
 			foreach ($form->getErrors() as $error)
 			{
 				throw new Exception($error->getMessage(), 404);
-				$error = true;
-			}
-		}
 
-		if ($error)
-		{
+			}
+
 			return false;
 		}
 
-		return true;
-
+		return $data;
 	}
+
 
 	/**
 	 * Method for getting the form from the model.
