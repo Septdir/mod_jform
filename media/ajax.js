@@ -17,7 +17,10 @@
 				data: $(this).serializeArray(),
 				beforeSend: function (response) {
 				},
-				complete: function (response) {
+				complete: function () {
+					if (typeof grecaptcha !== 'undefined' && grecaptcha && grecaptcha.reset) {
+						grecaptcha.reset();
+					}
 				},
 				success: function (response) {
 					console.log(response);
