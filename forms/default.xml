@@ -8,7 +8,6 @@
 			<option value="0">Option 1</option>
 			<option value="1">Option 2</option>
 		</field>
-		<field name="captcha" type="captcha" validate="captcha">
-		</field>
+		<field name="captcha" type="captcha" validate="captcha" label="CAPTCHA" />
 	</fieldset>
 </form>
