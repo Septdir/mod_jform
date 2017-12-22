@@ -59,7 +59,6 @@ class modJFormHelper
 			return false;
 		}
 
-		echo '<pre>', print_r($validData, true), '</pre>';
 
 		return true;
 
