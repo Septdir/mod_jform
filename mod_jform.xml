@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.8" type="module" client="site" method="upgrade">
+	<name>MOD_JFORM</name>
+	<author>Igor Berdichevskiy</author>
+	<creationDate>December 2017</creationDate>
+	<copyright>Copyright (c) 2013 - 2017 Igor Berdicheskiy. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>septdir@gmail.com</authorEmail>
+	<authorUrl>https://septdir.ru</authorUrl>
+	<version>1.0.0</version>
+	<description>MOD_JFORM_DESCRIPTION</description>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.mod_jform.ini</language>
+		<language tag="en-GB">en-GB/en-GB.mod_jform.sys.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.mod_jform.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.mod_jform.sys.ini</language>
+	</languages>
+	<files>
+		<filename module="mod_jform">mod_jform.php</filename>
+		<filename>helper.php</filename>
+		<folder>forms</folder>
+		<folder>tmpl</folder>
+	</files>
+	<media destination="mod_jform" folder="media">
+		<filename>ajax.js</filename>
+		<filename>ajax.min.js</filename>
+	</media>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+			</fieldset>
+			<fieldset name="advanced">
+				<field name="layout" type="modulelayout"
+					   label="JFIELD_ALT_LAYOUT_LABEL"
+					   description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
+				<field name="moduleclass_sfx" type="textarea"
+					   label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					   description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"
+					   rows="3"/>
+				<field name="cache" type="list"
+					   label="COM_MODULES_FIELD_CACHING_LABEL"
+					   description="COM_MODULES_FIELD_CACHING_DESC"
+					   default="1">
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+				<field name="cache_time" type="text"
+					   label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					   description="COM_MODULES_FIELD_CACHE_TIME_DESC"
+					   default="900"/>
+				<field name="cachemode" type="hidden"
+					   default="static">
+					<option value="static">Static</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
