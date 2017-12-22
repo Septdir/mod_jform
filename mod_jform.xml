@@ -28,6 +28,23 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
+				<fields name="form">
+					<field name="file" type="filelist"
+						   label="MOD_JFORM_PARAMS_FORM_FILE"
+						   directory="modules/mod_jform/forms"
+						   filter=".xml"
+						   stripext="true"
+						   hide_default="true"/>
+					<field name="id" type="text" label="MOD_JFORM_PARAMS_FORM_ID"/>
+					<field name="action" type="text" label="MOD_JFORM_PARAMS_FORM_ACTION"/>
+					<field name="ajax" type="radio"
+						   label="MOD_JFORM_PARAMS_FORM_AJAX"
+						   default="1"
+						   class="btn-group btn-group-yesno">
+						<option value="0">JNO</option>
+						<option value="1">JYES</option>
+					</field>
+				</fields>
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="layout" type="modulelayout"

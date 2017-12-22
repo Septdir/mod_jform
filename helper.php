@@ -10,7 +10,138 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Form\Form;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
+jimport('joomla.filesystem.file');
+
 class modJFormHelper
 {
 
+	/**
+	 * Form submit method
+	 *
+	 * @return bool|string
+	 *
+	 * @since 1.0.0
+	 */
+	public static function getAjax()
+	{
+		$app      = Factory::getApplication();
+		$moduleID = $app->input->get('module_id');
+
+		$module = self::getModule($moduleID);
+		if (!$module)
+		{
+			throw new Exception(Text::_('COM_AJAX_MODULE_NOT_ACCESSIBLE'), 404);
+
+			return false;
+		}
+
+		$form = self::getForm($module);
+		if (!$form)
+		{
+			throw new Exception(Text::_('MOD_JFORM_ERRORS_NOFORM'), 404);
+
+			return false;
+		}
+
+		$data = $app->input->post->get($form->getName(), array(), 'array');
+
+		$validate = $form->validate($data);
+
+		$error = false;
+		// Check for an error.
+		if ($validate instanceof \Exception)
+		{
+			throw new Exception($validate->getMessage(), 404);
+			$error = true;
+		}
+
+		// Check the validation results.
+		if ($validate === false)
+		{
+			// Get the validation messages from the form.
+			foreach ($form->getErrors() as $error)
+			{
+				throw new Exception($error->getMessage(), 404);
+				$error = true;
+			}
+		}
+
+		if ($error)
+		{
+			return false;
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * Method for getting the form from the model.
+	 *
+	 * @param   object $module Module object
+	 *
+	 * @return bool|JForm|Form A \JForm object on success, false on failure
+	 *
+	 * @since   1.6
+	 */
+	public static function getForm($module)
+	{
+
+		$params = new Registry($module->params);
+		// Get Form params
+		$formParams = ($params->get('form', 0)) ? new Registry($params->get('form')) : false;
+		if (!$formParams)
+		{
+			return false;
+		}
+
+		// Get form file
+		$file = ($formParams->get('file', 0)) ? __DIR__ . '/forms/' . $formParams->get('file') . '.xml' : false;
+		if (empty($file) || !JFile::exists($file))
+		{
+			return false;
+		}
+
+		$id = ($formParams->get('id', 0)) ? $formParams->get('id') : $module->module . '_' . $module->id;
+
+		$form = new Form($id, array('control' => $id));
+		$form->loadFile($file);
+
+		return $form;
+	}
+
+
+	/**
+	 * Get Module Object
+	 *
+	 * @param int $pk module id
+	 *
+	 * @return bool|object Module object or false
+	 *
+	 * @since 1.0.0
+	 */
+	protected static function getModule($pk = null)
+	{
+		$pk = (empty($pk)) ? Factory::getApplication()->input->get('module_id', 0) : $pk;
+		if (empty($pk))
+		{
+			return false;
+		}
+
+		// Get Params
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true)
+			->select('*')
+			->from('#__modules')
+			->where('id =' . $pk);
+		$db->setQuery($query);
+		$module = $db->loadObject();
+
+		return (!empty($module)) ? $module : false;
+	}
 }
