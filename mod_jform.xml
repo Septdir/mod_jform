@@ -55,4 +55,9 @@
 			</fieldset>
 		</fields>
 	</config>
+	<updateservers>
+		<server type="extension" priority="1" name="JForm Module">
+			https://septdir.ru/update.html?extension=mod_jform
+		</server>
+	</updateservers>
 </extension>
