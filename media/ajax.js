@@ -6,30 +6,3 @@
  * @license    GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
  * @link       https://septdir.ru
  */
-
-(function ($) {
-	$(document).ready(function () {
-		$('body').on('submit', '[data-modjform-ajax]', function () {
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				url: $(this).attr('action'),
-				data: $(this).serializeArray(),
-				beforeSend: function (response) {
-				},
-				complete: function () {
-					if (typeof grecaptcha !== 'undefined' && grecaptcha && grecaptcha.reset) {
-						grecaptcha.reset();
-					}
-				},
-				success: function (response) {
-					console.log(response);
-				},
-				error: function (response) {
-				}
-			});
-
-			return false;
-		});
-	});
-})(jQuery);
