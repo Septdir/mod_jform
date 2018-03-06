@@ -28,6 +28,42 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
+				<field name="file" type="filelist"
+					   label="MOD_JFORM_PARAMS_FILE"
+					   description="MOD_JFORM_PARAMS_FILE_DESCRIPTION"
+					   directory="modules/mod_jform/forms"
+					   filter=".xml"
+					   stripext="true"
+					   hide_default="true"
+					   required="true"/>
+				<field name="action" type="text"
+					   label="MOD_JFORM_PARAMS_ACTION"
+					   description="MOD_JFORM_PARAMS_ACTION_DESCRIPTION"
+					   hint="MOD_JFORM_PARAMS_ACTION_HINT"
+					   class="input-xxlarge"/>
+				<field name="ajax" type="radio"
+					   label="MOD_JFORM_PARAMS_AJAX"
+					   description="MOD_JFORM_PARAMS_AJAX_DESCRIPTION"
+					   default="0"
+					   class="btn-group btn-group-yesno">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="return" type="text"
+					   label="MOD_JFORM_PARAMS_RETURN"
+					   description="MOD_JFORM_PARAMS_RETURN_DESCRIPTION"
+					   hint="MOD_JFORM_PARAMS_RETURN_HINT"
+					   class="input-xxlarge"
+					   showon="ajax:0"/>
+				<field name="captcha" type="radio"
+					   label="MOD_JFORM_PARAMS_CAPTCHA"
+					   description="MOD_JFORM_PARAMS_CAPTCHA_DESCRIPTION"
+					   default="0"
+					   class="btn-group btn-group-yesno">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+					<option value="2">MOD_JFORM_PARAMS_CAPTCHA_GUESTS_ONLY</option>
+				</field>
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="layout" type="modulelayout"
