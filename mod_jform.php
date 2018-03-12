@@ -25,7 +25,7 @@ $form = $helper->getForm();
 if ($form)
 {
 	$ajax           = $params->get('ajax');
-	$default_action = JUri::root(true) . '/index.php?option=com_ajax&module=' . $module->name;
+	$default_action = Uri::root(true) . '/index.php?option=com_ajax&module=' . $module->name;
 	$action         = $params->get('action', $default_action);
 
 	// Set default action params
