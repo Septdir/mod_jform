@@ -16,6 +16,7 @@ use Joomla\CMS\Form\Form;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Plugin\PluginHelper;
 
 jimport('joomla.filesystem.file');
 
@@ -72,18 +73,29 @@ class modJFormHelper
 		$form = self::getForm();
 		if (!$form)
 		{
-			return self::setError(Text::_('MOD_JFORM_ERROR_MODULE_NOT_FOUND'));
+			return self::setError(Text::_('MOD_JFORM_ERROR_FORM_NOT_FOUND'));
 		}
+
+		$app     = Factory::getApplication();
+		$control = $form->getFormControl();
+		$data    = $app->input->post->get($control, array(), 'array');
+
+		// Filter and validate the form data.
+		$validData = self::validate($form, $data);
+
+		// Bind data to the form.
+		$form->bind($validData);
 
 		echo '<pre>', print_r($form, true), '</pre>';
 		echo '<pre>', print_r($module, true), '</pre>';
 		echo '<pre>', print_r($params, true), '</pre>';
+		echo '<pre>', print_r($validData, true), '</pre>';
 
 		return true;
 	}
 
 	/**
-	 * Method for getting the form from the model.
+	 * Method for getting the form.
 	 *
 	 * @return bool|Form  Form object on success, false on failure
 	 *
@@ -123,7 +135,56 @@ class modJFormHelper
 	}
 
 	/**
-	 *  Method to get Module object
+	 * Method to validate the form data.
+	 *
+	 * @param   Form  $form The form to validate against.
+	 * @param   array $data The data to validate.
+	 *
+	 * @return  array|boolean  Array of filtered data if valid, false otherwise.
+	 *
+	 * @see     \Joomla\CMS\Form\FormRule
+	 * @see     \Joomla\Filter\InputFilter
+	 * @since   1.0.0
+	 */
+	protected static function validate($form, $data)
+	{
+		// Include the plugins for the content events.
+		PluginHelper::importPlugin('content');
+
+		$dispatcher = \JEventDispatcher::getInstance();
+		$dispatcher->trigger('onUserBeforeDataValidation', array($form, &$data));
+
+		// Filter and validate the form data.
+		$data   = $form->filter($data);
+		$return = $form->validate($data);
+
+		// Check for an error.
+		if ($return instanceof \Exception)
+		{
+			self::setError($return->getMessage());
+
+			return false;
+		}
+
+		// Check the validation results.
+		if ($return === false)
+		{
+			// Get the validation messages from the form.
+			$errors = array();
+			foreach ($form->getErrors() as $message)
+			{
+				$errors[] = $message->getMessage();
+			}
+			self::setError($errors);
+
+			return false;
+		}
+
+		return $data;
+	}
+
+	/**
+	 *  Method to get module object
 	 *
 	 * @param int $pk Module id
 	 *
@@ -169,25 +230,30 @@ class modJFormHelper
 	/**
 	 * Method to set error response
 	 *
-	 * @param string $message Message text
+	 * @param string|array $messages Messages text
 	 *
 	 * @return false
 	 *
 	 * @since 1.0.0
 	 */
-	protected static function setError($message)
+	protected static function setError($messages)
 	{
-		$app    = Factory::getApplication();
-		$return = $app->input->get('return', null, 'base64');
+		$app      = Factory::getApplication();
+		$return   = $app->input->get('return', null, 'base64');
+		$messages = (is_array($messages)) ? $messages : (array) $messages;
+
 		if (!$app->input->get('ajax') && !is_null($return) && Uri::isInternal(base64_decode($return)))
 		{
-			$app->enqueueMessage($message, 'error');
+			foreach ($messages as $message)
+			{
+				$app->enqueueMessage($message, 'error');
+			}
 			$app->redirect(base64_decode($return));
 
 			return false;
 		}
 
-		throw new Exception($message, 404);
+		throw new Exception(implode(PHP_EOL, $messages), 404);
 
 		return false;
 	}
