@@ -1,4 +1,4 @@
-# JForm Module
+# Модуль JForm
 Модуль форм использующий Form для Joomla! CMS
 
 **[Скачать последнюю версию](https://github.com/Septdir/mod_jform/releases/latest)**   
