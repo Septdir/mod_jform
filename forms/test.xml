@@ -3,18 +3,17 @@
 	<fieldset name="first" label="First Fieldset">
 		<field name="text" type="text"
 			   label="Text Field"
-			   size="10"
-			   />
+			   size="10"/>
 		<field name="list" type="list"
 			   label="Select field"
-			   >
+			   required="true">
 			<option value="">Please Select</option>
 			<option value="op1">Option 1</option>
 			<option value="op2">Option 2</option>
 		</field>
 		<field name="checkbox" type="checkbox"
 			   label="Checkbox field"
-			   value="1" />
+			   value="1"/>
 	</fieldset>
 	<fieldset name="second" label="Second Fieldset">
 		<field name="list_multiple" type="list"
@@ -25,7 +24,7 @@
 			<option value="op3">Option 3</option>
 		</field>
 		<field name="checkboxes" type="checkboxes"
-			label="Checkboxes field">
+			   label="Checkboxes field">
 			<option value="op1">Option 1</option>
 			<option value="op2">Option 2</option>
 			<option value="op3">Option 3</option>
