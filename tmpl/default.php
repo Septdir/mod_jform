@@ -24,7 +24,8 @@ $data_attribute = ($ajax) ? ' data-mod_jform="ajax"' : '';
 echo '<form id="' . $form->getName() . '" action="' . $action . '"' . $data_attribute . ' method="post">';
 
 // Render fieldsets
-if ($ajax) {
+if ($ajax)
+{
 	echo '<div class="messages" style="display: none;">';
 	echo '<div class="message error alert alert-error" style="display: none;"></div>';
 	echo '<div class="message success alert alert-success" style="display: none;"></div>';
