@@ -1,5 +1,3 @@
-### Attention extension is under development
-
 # JForm Module
 Form module using Form Class for the Joomla CMS.
 
