@@ -15,7 +15,7 @@ Form module using Form Class for the Joomla CMS.
 *Leave the field blank to use the standard com_ajax handler*
 * **Return** - Link to return to a specific page  
 *Drop the field blank to return to the current page*
-* **Use Ajax** - Use AJAX send form to use the form should have the attribute data-mod_jform=\ajax\
+* **Use Ajax** - Use AJAX send form to use the form should have the attribute `data-mod_jform="ajax"`
 * **Сaptcha** - Add captcha to form
 * **Send email** - Activate send email function
 * **Administrator email** - The email address where the letter with the form data will come  
