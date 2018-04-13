@@ -3,10 +3,11 @@
 	<fieldset name="first" label="First Fieldset">
 		<field name="text" type="text"
 			   label="Text Field"
-			   size="10"/>
+			   size="10"
+			   />
 		<field name="list" type="list"
 			   label="Select field"
-			   required="true">
+			   >
 			<option value="">Please Select</option>
 			<option value="op1">Option 1</option>
 			<option value="op2">Option 2</option>

@@ -348,7 +348,11 @@ class modJFormHelper
 			return true;
 		}
 
-		throw new Exception(implode(PHP_EOL, $messages), 200);
+		foreach ($messages as $message)
+		{
+			$app->enqueueMessage($message, 'success');
+		}
+		$app->input->set('ignoreMessages', false);
 
 		return true;
 	}
