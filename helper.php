@@ -156,7 +156,7 @@ class modJFormHelper
 				}
 
 				$body .= '<tr>';
-				$body .= '<td align="right"><strong>' . $field->getAttribute('label') . '</strong></td>';
+				$body .= '<td align="right"><strong>' . Text::_($field->getAttribute('label')) . '</strong></td>';
 				$body .= '<td>' . $value . '</td>';
 				$body .= '</tr>';
 			}
@@ -182,7 +182,7 @@ class modJFormHelper
 		{
 			if ($option->value == $value)
 			{
-				return $option->text;
+				return Text::_($option->text);
 			}
 		}
 

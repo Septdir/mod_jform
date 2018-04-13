@@ -2,33 +2,34 @@
 <form>
 	<fieldset name="first" label="First Fieldset">
 		<field name="text" type="text"
-			   label="Text Field"
+			   label="JGLOBAL_TITLE"
 			   size="10"/>
-		<field name="list" type="list"
-			   label="Select field"
+		<field name="date" type="list"
+			   label="JSTATUS"
 			   required="true">
-			<option value="">Please Select</option>
-			<option value="op1">Option 1</option>
-			<option value="op2">Option 2</option>
+			<option value="">JOPTION_SELECT_PUBLISHED</option>
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="-2">JTRASHED</option>
 		</field>
+	</fieldset>
+	<fieldset name="second" label="Second Fieldset">
 		<field name="checkbox" type="checkbox"
 			   label="Checkbox field"
 			   value="1"/>
-	</fieldset>
-	<fieldset name="second" label="Second Fieldset">
 		<field name="list_multiple" type="list"
 			   label="Multiple select field"
 			   multiple="true">
-			<option value="op1">Option 1</option>
-			<option value="op2">Option 2</option>
-			<option value="op3">Option 3</option>
+			<option value="1">Option 1</option>
+			<option value="2">Option 2</option>
+			<option value="3">Option 3</option>
 		</field>
 		<field name="checkboxes" type="checkboxes"
 			   label="Checkboxes field">
-			<option value="op1">Option 1</option>
-			<option value="op2">Option 2</option>
-			<option value="op3">Option 3</option>
-			<option value="op4">Option 4</option>
+			<option value="1">Option 1</option>
+			<option value="2">Option 2</option>
+			<option value="3">Option 3</option>
+			<option value="4">Option 4</option>
 		</field>
 	</fieldset>
 </form>
