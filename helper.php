@@ -17,6 +17,7 @@ use Joomla\CMS\Session\Session;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Utilities\ArrayHelper;
 
 jimport('joomla.filesystem.file');
 
@@ -86,12 +87,106 @@ class modJFormHelper
 		// Bind data to the form.
 		$form->bind($validData);
 
-		echo '<pre>', print_r($form, true), '</pre>';
-		echo '<pre>', print_r($module, true), '</pre>';
-		echo '<pre>', print_r($params, true), '</pre>';
-		echo '<pre>', print_r($validData, true), '</pre>';
+		if ($params->get('send_email'))
+		{
+			$siteConfig = Factory::getConfig();
 
-		return true;
+			// Prepare admin mail
+			$subject   = Text::sprintf('MOD_JFORM_ADMIN_MAIL_SUBJECT', $module->title);
+			$sender    = array($siteConfig->get('mailfrom'), $siteConfig->get('sitename'));
+			$recipient = $params->get('admin_email', $siteConfig->get('mailfrom'));
+			$body      = self::getAdminMailBody($form);
+
+			// Send email
+			$mail = Factory::getMailer();
+			$mail->setSubject($subject);
+			$mail->setSender($sender);
+			$mail->addRecipient($recipient);
+			$mail->setBody($body);
+			$mail->isHtml(true);
+			$mail->Encoding = 'base64';
+
+			return ($mail->send()) ? self::setResponse(Text::_('MOD_JFORM_SUCCESS_SEND_ADMIN_MAIL')) :
+				self::setError(Text::_('MOD_JFORM_ERROR_SEND_ADMIN_MAIL'));
+		}
+
+		return self::setResponse(Text::_('MOD_JFORM_SUCCESS'));
+	}
+
+	/**
+	 * Method for getting admin email body
+	 *
+	 * @param $form Form  Form object on success, false on failure
+	 *
+	 * @return string Message body
+	 *
+	 * @since   1.0
+	 */
+	public static function getAdminMailBody($form)
+	{
+		$body      = '<table cellspacing="1" cellpadding="3"><tbody>';
+		$fieldsets = $form->getFieldsets();
+		foreach ($fieldsets as $key => $fieldset)
+		{
+			$fields = $form->getFieldset($key);
+			foreach ($fields as $field)
+			{
+				$value = $field->value;
+				$type  = $field->getAttribute('type');
+				if ($type == 'list' || $type == 'checkboxes')
+				{
+					$options = $field->__get('options');
+					if (!is_array($value))
+					{
+						$value = self::getOptionValue($options, $value);
+					}
+					else
+					{
+						$values = array();
+						foreach ($value as $item)
+						{
+							$values[] = self::getOptionValue($options, $item);
+						}
+						$value = implode(', ', $values);
+					}
+				}
+				if (is_array($value))
+				{
+					$value = ArrayHelper::toString($value);
+				}
+
+				$body .= '<tr>';
+				$body .= '<td align="right"><strong>' . $field->getAttribute('label') . '</strong></td>';
+				$body .= '<td>' . $value . '</td>';
+				$body .= '</tr>';
+			}
+		}
+		$body .= '</tbody></table>';
+
+		return $body;
+	}
+
+	/**
+	 * Method to get value text form field options
+	 *
+	 * @param array $options Options array
+	 * @param array $value   Field value
+	 *
+	 * @return string
+	 *
+	 * @since 1.0.0
+	 */
+	protected static function getOptionValue($options = array(), $value = null)
+	{
+		foreach ($options as $option)
+		{
+			if ($option->value == $value)
+			{
+				return $option->text;
+			}
+		}
+
+		return '';
 	}
 
 	/**
@@ -225,6 +320,37 @@ class modJFormHelper
 		}
 
 		return self::$_module;
+	}
+
+	/**
+	 * Method to set response
+	 *
+	 * @param string|array $messages Messages text
+	 *
+	 * @return true
+	 *
+	 * @since 1.0.0
+	 */
+	protected static function setResponse($messages)
+	{
+		$app      = Factory::getApplication();
+		$return   = $app->input->get('return', null, 'base64');
+		$messages = (is_array($messages)) ? $messages : (array) $messages;
+
+		if (!$app->input->get('ajax') && !is_null($return) && Uri::isInternal(base64_decode($return)))
+		{
+			foreach ($messages as $message)
+			{
+				$app->enqueueMessage($message, 'success');
+			}
+			$app->redirect(base64_decode($return));
+
+			return true;
+		}
+
+		throw new Exception(implode(PHP_EOL, $messages), 200);
+
+		return true;
 	}
 
 	/**

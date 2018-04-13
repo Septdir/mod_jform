@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset name="test" label="Test Fields">
+	<fieldset name="first" label="First Fieldset">
 		<field name="text" type="text"
 			   label="Text Field"
 			   size="10"/>
@@ -8,8 +8,27 @@
 			   label="Select field"
 			   required="true">
 			<option value="">Please Select</option>
-			<option value="0">Option 1</option>
-			<option value="1">Option 2</option>
+			<option value="op1">Option 1</option>
+			<option value="op2">Option 2</option>
+		</field>
+		<field name="checkbox" type="checkbox"
+			   label="Checkbox field"
+			   value="1" />
+	</fieldset>
+	<fieldset name="second" label="Second Fieldset">
+		<field name="list_multiple" type="list"
+			   label="Multiple select field"
+			   multiple="true">
+			<option value="op1">Option 1</option>
+			<option value="op2">Option 2</option>
+			<option value="op3">Option 3</option>
+		</field>
+		<field name="checkboxes" type="checkboxes"
+			label="Checkboxes field">
+			<option value="op1">Option 1</option>
+			<option value="op2">Option 2</option>
+			<option value="op3">Option 3</option>
+			<option value="op4">Option 4</option>
 		</field>
 	</fieldset>
 </form>
