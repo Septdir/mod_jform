@@ -23,7 +23,7 @@ Form module using Form Class for the Joomla CMS.
 
 
 ## How to use
-Load the `.xml` form file with [Joomla!Fields](https://docs.joomla.org/Form_field) into the `modules/mod_jform/forms` directory and use.
+Load the `.xml` form file with [Joomla! Fields](https://docs.joomla.org/Form_field) into the `modules/mod_jform/forms` directory and use.
 
 
 ## Screenshots
