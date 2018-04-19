@@ -3,7 +3,7 @@ Form module using Form Class for the Joomla CMS.
 
 **[Download last version](https://github.com/Septdir/mod_jform/releases/latest)**   
 
-**Supported Joomla versions:** 3.8.0 and later  
+**Supported Joomla versions:** 3.8.0 and later.  
 **Read this in other languages:** 
 [English](https://github.com/Septdir/mod_jform/blob/master/README.md), 
 [Русский](https://github.com/Septdir/mod_jform/blob/master/README.ru-RU.md).
